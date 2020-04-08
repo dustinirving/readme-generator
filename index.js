@@ -10,7 +10,7 @@ const axios = require('axios')
 // Define a global variable for the avatar URL
 let avatarURL = ''
 
-// Define a constant as an array of objects to pass through
+// Define a constant as an array of objects to pass through the inquirer
 const questions = [{
         message: 'What is the title of your project?',
         name: 'title',
@@ -62,13 +62,20 @@ const questions = [{
     }
 ]
 
+// Chain of promises
+// Prompt the user for their github username
 promptUsername()
+    // Retrieve the user's profile image with the axios module
     .then(githubAPI)
+    // Prompt questions about the README file
     .then(promptQuestions)
+    // Create a string with the user's answers to be put in the markdown file
     .then(createReadMe)
+    // Create the README file as a markdown
     .then(writeReadMe)
 
 
+// This function uses the inquirer module to prompt the user their username
 function promptUsername() {
     return inquirer.prompt({
         message: 'What is your github username?',
@@ -76,23 +83,26 @@ function promptUsername() {
     })
 }
 
-
+// This async function takes the inputed username and retrieves their profile image with axios module
 async function githubAPI({ username }) {
     try {
         const response = await axios.get(`https://api.github.com/users/${username}`)
+            // Waits until it retireves the data then stores it in the previously define global variable
         avatarURL = response.data.avatar_url
     } catch (err) {
         console.log(err)
     }
 }
 
+// This function takes in the array objects containing questions to prompt the user
 function promptQuestions() {
     return inquirer.prompt(questions)
 }
 
+// This function takes the user's answers and generates a long string
 function createReadMe(answers) {
-    console.log(answers.license)
     let badgeURL
+        // Depending on the license chosen by the user, a badge is generated
     if (answers.license === 'MIT') {
         badgeURL = 'https://img.shields.io/apm/l/vim-mode'
     } else if (answers.license === 'EPL') {
@@ -100,9 +110,11 @@ function createReadMe(answers) {
     } else if (answers.license === '') {
         badgeURL = 'https://img.shields.io/aur/license/android-studio'
     }
+    // Return the string to be used to create the readmefile
     return `\n# ${answers.title}\n![](${badgeURL})\n## Description\n${answers.description}\n## Table of Contents\n1. [Installation](#Installation)\n2. [Usage](#Usage)\n3. [License](#License)\n4. [Contributing](#Contributing)\n5. [Tests](#Tests)\n6. [Questions](#Questions)\n## Installation\n${answers.installation}\n## Usage\n${answers.usage}\n## License\nLicensed under ${answers.license}\n## Contributing\n${answers.contributing}\n## Tests\n${answers.tests}\n## Questions\nEmail: 'hidden'\n\n\n![Profile Image](${avatarURL})`
 }
 
+// Asyn function to generate a new markdown file with the user inputed content
 async function writeReadMe(content) {
     try {
         await fs.writeFile('generateREADME.md', content)
@@ -111,37 +123,3 @@ async function writeReadMe(content) {
         console.log(err)
     }
 }
-
-
-
-
-// // Start Chain of Promises
-// // init()
-// // function init() {}
-
-// // Prompt Githubusername
-// promptUsername()
-//     // Retrieve Profile Image with github API (api.js module)
-//     .then(api)
-//     // Prompt Questions about the Readme File
-//     .then(promptQuestions)
-//     // Write data to a string
-//     .then(writeToFile)
-
-// // // Use the data to generate a Markdown file (generateMarkdown.js module)
-// // .then(generateMarkdown)
-
-// function promptUsername() {
-//     const username = inquirer.prompt({
-//         message: 'What is your github username?',
-//         name: 'username'
-//     })
-//     return username
-// }
-
-// function promptQuestions() {
-//     const answers = inquirer.prompt(questions)
-//     return answers
-// }
-
-// function writeToFile(fileName, data){}

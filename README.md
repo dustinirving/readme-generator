@@ -1,1 +1,0 @@
-{"badge":"","title":"","description":"","tableOfContents":"","installation":"","usage":"","license":"","contributing":"","tests":""}
