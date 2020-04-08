@@ -24,4 +24,4 @@ Example tests...
 Email: 'hidden'
 
 
-![Profile Image](https://avatars0.githubusercontent.com/u/25419874?v=4)
+![Profile Image](https://avatars3.githubusercontent.com/u/53638843?v=4)

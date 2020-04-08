@@ -11,6 +11,7 @@ const axios = require('axios')
 let avatarURL = ''
 
 // Define a constant as an array of objects to pass through the inquirer
+// Default values if the user doesn't input anything
 const questions = [{
         message: 'What is the title of your project?',
         name: 'title',
